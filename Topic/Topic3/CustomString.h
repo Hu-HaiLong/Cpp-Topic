@@ -7,10 +7,6 @@ using namespace std;
 
 class CustomString
 {
-private:
-	char* Data;
-	size_t Size;
-
 public:
 	CustomString(const CustomString& Str);
 	CustomString(const char* Str);
@@ -63,4 +59,8 @@ public:
 	void Append(const char* Other);
 	int Find(const char* Other);
 	CustomString* Split(const char* InS);
+
+private:
+	char* Data;
+	size_t Size = 0;
 };

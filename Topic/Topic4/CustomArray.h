@@ -7,11 +7,6 @@ using namespace std;
 template <typename T = int>
 class CustomArray
 {
-private:
-	int Cur = -1;
-	int Size;
-	T* KArray;
-
 public:
 	CustomArray(const CustomArray& Arr)
 	{
@@ -145,4 +140,9 @@ public:
 			cout << KArray[i] << '\n';
 		}
 	}
+
+private:
+	int Cur = -1;
+	int Size = 0;
+	T* KArray;
 };

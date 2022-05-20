@@ -23,16 +23,12 @@ public:
 	}
 
 private:
-	P Data;
+	P Data = P(0);
 };
 
 template <typename T = int>
 class CustomList
 {
-private:
-	int Size = 0;
-	Node<T>* Head;
-
 public:
 	CustomList(const CustomList& List)
 	{
@@ -153,5 +149,9 @@ public:
 
 		return CurNode;
 	}
+
+private:
+	int Size = 0;
+	Node<T>* Head;
 };
 

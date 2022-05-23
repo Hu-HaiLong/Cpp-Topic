@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
-#include <cstdio>
-#include <stdio.h>
+
 using namespace std;
 
 template <typename T = int>
@@ -32,12 +31,18 @@ public:
 
 	void Reserve(int Size)
 	{
+		T* Temp = new T[this->Size];
+		memcpy(Temp, KArray, this->Size * sizeof(T));
+		
 		if (KArray != nullptr)
 		{
 			delete[] KArray;
 		}
+
 		KArray = new T[Size];
+		memcpy(KArray, Temp, this->Size * sizeof(T));
 		this->Size = Size;
+		this->Cur = Cur;
 	}
 
 	void Push(const T& Value)
@@ -52,17 +57,17 @@ public:
 	
 	void Insert(int Pos, const T& Value)
 	{
-		if (Pos < 0 || Pos - 1 >= Size || Pos - 1 > Cur)
+		if (Pos < 0 || Pos >= Size)
 		{
 			return;
 		}
 
-		for (int i = Size - 1; i >= Pos; i--)
+		for (int i = Cur + 1; i >= Pos; i--)
 		{
-			KArray[i] = KArray[i - 1];
+			memcpy(&KArray[i], &KArray[i - 1], sizeof(T));
 		}
 
-		KArray[Pos - 1] = Value;
+		KArray[Pos] = Value;
 		Cur++;
 	}
 	
@@ -73,22 +78,24 @@ public:
 			return;
 		}
 
-		if (Pos < 0 || Pos - 1 >= Size || Pos - 1 > Cur)
+		if (Pos < 0 || Pos > Cur)
 		{
 			return;
 		}
 
-		for (int i = Pos - 1; i <= Cur; i++)
+		for (int i = Pos; i <= Cur; i++)
 		{
-			KArray[i] = KArray[i + 1];
+			memcpy(&KArray[i], &KArray[i + 1], sizeof(T));
 		}
 
 		Cur--;
 	}
 	
-	void Pop()
+	T Pop()
 	{
-		Remove(1);
+		T Result = KArray[0];
+		Remove(0);
+		return Result;
 	}
 	
 	void Clear()
@@ -144,5 +151,5 @@ public:
 private:
 	int Cur = -1;
 	int Size = 0;
-	T* KArray;
+	T* KArray = nullptr;
 };

@@ -10,8 +10,8 @@ class Node
 public:
 	Node() {}
 
-	Node* Pre;
-	Node* Next;
+	Node* Pre = nullptr;
+	Node* Next = nullptr;
 	
 	void SetData(P Data) {
 		this->Data = Data;
@@ -39,8 +39,8 @@ public:
 	CustomList()
 	{
 		Head = new Node<T>();
-		Head->Pre = NULL;
-		Head->Next = NULL;
+		Head->Pre = nullptr;
+		Head->Next = nullptr;
 		Head->SetData(NULL);
 	}
 

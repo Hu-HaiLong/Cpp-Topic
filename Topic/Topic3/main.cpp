@@ -21,6 +21,6 @@ int main()
 	int Index = Str1.Find("es");
 
 	CustomString* Ret = Str2.Split(",");
-
+	
 	return 0;
 }

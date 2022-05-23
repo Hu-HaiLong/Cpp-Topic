@@ -23,6 +23,13 @@ CustomString::CustomString(const char* Str)
 	}
 }
 
+CustomString::CustomString()
+{
+	Data = new char[1];
+	*Data = '\0';
+	Size = 0;
+}
+
 CustomString::~CustomString()
 {
 	if (Data != nullptr)
@@ -40,7 +47,7 @@ bool operator==(const CustomString& Lhs, const CustomString& Rhs)
 		return false;
 	}
 
-	for (size_t i = 0; i < Lhs.Size; i++)
+	for (int i = 0; i < Lhs.Size; i++)
 	{
 		if (Lhs.Data[i] != Rhs.Data[i])
 		{
@@ -51,64 +58,57 @@ bool operator==(const CustomString& Lhs, const CustomString& Rhs)
 	return true;
 }
 
-size_t CustomString::Len()
+int CustomString::Len() const
 {
 	return Size;
 }
 
-char* CustomString::Sub(int Start, int End)
+CustomString CustomString::Sub(int Start, int End) const
 {
-	char* Temp = new char[End - Start + 2];
-
-	for (int i = Start; i <= End; i++)
+	if (End - Start < 0 || Start < 0)
 	{
-		Temp[i - Start] = Data[i];
+		return nullptr;
 	}
 
-	size_t TempSize = End - Start + 1;
-	Temp[TempSize] = '\0';
-	return Temp;
+	CustomString* Str = new CustomString("");
+	Str->Data = new char[End - Start + 2];
+	Str->Size = End - Start + 1;
+	memcpy(Str->Data, this->Data + Start, Str->Size * sizeof(char));
+	Str->Data[Str->Size] = '\0';
+	return *Str;
 }
 
-void CustomString::Append(const char* Other)
+void CustomString::Append(const char* Str)
 {
-	size_t oldLen = Size;
-	Size += CharLen(Other);
+	int oldLen = Size;
+	Size += CharLen(Str);
 	char* Temp = new char[Size + 1];
 
-	for (size_t i = 0; i < oldLen; i++)
-	{
-		Temp[i] = Data[i];
-	}
+	memcpy(Temp, Data, oldLen * sizeof(char) + 1);
+
+	memcpy(Temp + oldLen * sizeof(char), Str, (Size - oldLen) * sizeof(char) + 1);
 
 	delete[] Data;
-
-	for (size_t j = oldLen; j < Size; j++)
-	{
-		Temp[j] = Other[j - oldLen];
-	}
-
-	Temp[Size] = '\0';
 	Data = Temp;
 }
 
-int CustomString::Find(const char* Other)
+int CustomString::Find(const char* SubStr, int Pos) const
 {
-	size_t OtherLen = CharLen(Other);
+	int SubStrLen = CharLen(SubStr);
 
-	for (size_t L = 0; L + OtherLen < Size; L++)
+	for (int L = Pos; L + SubStrLen < Size; L++)
 	{
-		size_t R = 0;
+		int R = 0;
 
-		for (; R < OtherLen; R++)
+		for (; R < SubStrLen; R++)
 		{
-			if (Data[L+R] != Other[R])
+			if (Data[L+R] != SubStr[R])
 			{
 				break;
 			}
 		}
 
-		if (R == OtherLen)
+		if (R == SubStrLen)
 		{
 			return L;
 		}
@@ -119,15 +119,48 @@ int CustomString::Find(const char* Other)
 
 CustomString* CustomString::Split(const char* InS)
 {
-	int InPos = Find(InS);
+	int Pos1 = 0;
+	int Pos2 = Find(InS);
 	
-	if (InPos < 0)
+	if (Pos2 < 0)
 	{
-		return nullptr;
+		return this;
+	}
+	
+	CustomString* Strs = new CustomString[Size];
+	
+	int Num = 0;
+
+	while (Pos2 != -1)
+	{
+		Strs[Num] = this->Sub(Pos1, Pos2 - Pos1 - 1);
+		Pos1 = Pos2 + CharLen(InS);
+		Pos2 = this->Find(InS, Pos1);
+		Num++;
 	}
 
-	Data = Sub(0, InPos - 1);
-	Size = InPos;
+	if (Pos2 != Size)
+	{
+		Strs[Num] = this->Sub(Pos1, Size - 1);
+	}
 
-	return this;
+	return Strs;
+}
+
+extern int CharLen(const char* Str)
+{
+	int num = 0;
+
+	if (Str == nullptr)
+	{
+		return num;
+	}
+
+	while (*Str != '\0')
+	{
+		num++;
+		Str++;
+	}
+
+	return num;
 }

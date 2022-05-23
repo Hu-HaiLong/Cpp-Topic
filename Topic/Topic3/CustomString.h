@@ -1,16 +1,25 @@
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <cstdio>
-#include <stdio.h>
+
 using namespace std;
+
+extern int CharLen(const char* Str);
 
 class CustomString
 {
 public:
 	CustomString(const CustomString& Str);
 	CustomString(const char* Str);
+	CustomString();
 	~CustomString();
+	
+	CustomString& operator=(const CustomString& Str)
+	{
+		this->Size = Str.Size;
+		Data = new char[this->Size + 1];
+		memcpy(this->Data, Str.Data, this->Size * sizeof(char) + 1);
+		return *this;
+	}
 
 	CustomString& operator=(const char* Str)
 	{
@@ -36,31 +45,13 @@ public:
 
 	friend bool operator==(const CustomString& Lhs, const CustomString& Rhs);
 
-	size_t CharLen(const char* Str)
-	{
-		size_t num = 0;
-
-		if (Str == nullptr)
-		{
-			return num;
-		}
-
-		while (*Str != '\0')
-		{
-			num++;
-			Str++;
-		}
-
-		return num;
-	}
-
-	size_t Len();
-	char* Sub(const int Start, const int End);
-	void Append(const char* Other);
-	int Find(const char* Other);
+	int Len() const;
+	CustomString Sub(const int Start, const int End) const;
+	void Append(const char* Str);
+	int Find(const char* SubStr, int Pos = 0) const;
 	CustomString* Split(const char* InS);
 
 private:
-	char* Data;
-	size_t Size = 0;
+	char* Data = nullptr;
+	int Size = 0;
 };

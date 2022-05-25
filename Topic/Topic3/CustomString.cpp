@@ -139,7 +139,7 @@ CustomString* CustomString::Split(const char* InS)
 		Num++;
 	}
 
-	if (Pos2 != Size)
+	if (Pos2 != Size && Num < Size)
 	{
 		Strs[Num] = this->Sub(Pos1, Size - 1);
 	}

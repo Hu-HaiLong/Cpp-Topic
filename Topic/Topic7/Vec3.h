@@ -46,5 +46,5 @@ public:
 	}
 
 public:
-	float X, Y, Z = 0.f;
+	float X = 0.f, Y = 0.f, Z = 0.f;
 };

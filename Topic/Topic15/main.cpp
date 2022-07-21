@@ -13,18 +13,18 @@ public:
     {
         std::cout << "  Test1  " << std::endl;
     }
-    static void test2(void* Params)
+    static void Test2(void* Params)
     {
         std::cout << "  Test2  " << *(int*)Params << std::endl;
     }
 };
 
-void test()
+void Test3()
 {
     Binder<Test> Binder;
     Binder.BindVar("P4", offsetof(Test, P4));
     Binder.BindFunc("Test1", &Test::Test1);
-    Binder.BindStaticFunc("Test2", Test::test2);
+    Binder.BindStaticFunc("Test2", Test::Test2);
 
     Test T1;
 
@@ -39,5 +39,5 @@ void test()
 
 int main()
 {
-    test();
+    Test3();
 }

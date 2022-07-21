@@ -30,11 +30,6 @@ struct Node
 class SensitiveWordHelper
 {
 public:
-	SensitiveWordHelper()
-	{
-		Node* Root = new Node();
-	}
-
 	void Load(const char* FileName);
 	bool Check(const char* Words);
 	void Print();

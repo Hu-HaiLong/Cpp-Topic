@@ -110,36 +110,45 @@ struct TabFileStruct\
     TabFileStruct()\
     {\
         FString TabFullPath = FPaths::ProjectDir() + TabPath;\
+        \
         if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*TabFullPath))\
         {\
             return;\
         }\
+        \
         TArray<FString> TabDatas;\
         FFileHelper::LoadFileToStringArray(TabDatas, *TabFullPath);\
         int32 Line = 0;\
+        \
         for (FString LineContent : TabDatas)\
         {\
             UE_LOG(LogTemp, Warning, TEXT("[Line %d] %s"), Line, *LineContent);\
+            \
             if (Line == 0)\
             {\
                 Line++;\
                 continue;\
             }\
+            \
             TabDataStruct* TabDataIns = new TabDataStruct();\
             TabDataIns->RegisterParams();\
             TabDataIns->AddData(TabDatas, Line);\
             Datas.Add(TabDataIns->GetKey(), *TabDataIns);\
             Line++;\
         }\
+        \
         UE_LOG(LogTemp, Warning, TEXT("[TabFileStruct TEST Print]"));\
+        \
         for (auto& Data : Datas)\
         {\
             Data.Value.Print();\
         }\
     }\
+\
 private:\
     TMap<TabDataStruct::TYPE, TabDataStruct> Datas;\
 };\
+\
 TabFileStruct();\
 
 //TAB_FILE_WITH_PATH(FSceneTabFile, FSceneTabData, "Content/Common/Scene/scene.tab")

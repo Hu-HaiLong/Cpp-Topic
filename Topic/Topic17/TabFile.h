@@ -14,7 +14,7 @@ public:
     void AddData(TArray<FString> TabDatas, int32 Line);
 
     void Print();
-    
+
     virtual void RegisterParams() = 0;
 
 private:
@@ -32,18 +32,18 @@ void FTabData::AddData(TArray<FString> TabDatas, int32 Line)
     TArray<FString> Values;
     TabDatas[Line].ParseIntoArray(Values, TEXT("\t"));
 
-    int32 Index = 0; 
-    
+    int32 Index = 0;
+
     for (FString Name : Names)
     {
         UE_LOG(LogTemp, Warning, TEXT("[Value] %s"), *Name);
-        
+
         if (int32** TempInt = Int_Datas.Find(Name))
         {
             **TempInt = FCString::Atoi(*Values[Index]);
             UE_LOG(LogTemp, Warning, TEXT(" -- Value  %d"), **TempInt);
         }
-        else if(FString** TempStr = Str_Datas.Find(Name))
+        else if (FString** TempStr = Str_Datas.Find(Name))
         {
             **TempStr = Values[Index];
             UE_LOG(LogTemp, Warning, TEXT(" -- Value  %s   --  %s"), ***TempStr, **Str_Datas[Name]);
@@ -110,25 +110,26 @@ struct TabFileStruct\
     TabFileStruct()\
     {\
         FString TabFullPath = FPaths::ProjectDir() + TabPath;\
-        if (FPlatformFileManager::Get().GetPlatformFile().FileExists(*TabFullPath))\
+        if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*TabFullPath))\
         {\
-            TArray<FString> TabDatas;\
-            FFileHelper::LoadFileToStringArray(TabDatas, *TabFullPath);\
-            int32 Line = 0;\
-            for (FString LineContent : TabDatas)\
+            return;\
+        }\
+        TArray<FString> TabDatas;\
+        FFileHelper::LoadFileToStringArray(TabDatas, *TabFullPath);\
+        int32 Line = 0;\
+        for (FString LineContent : TabDatas)\
+        {\
+            UE_LOG(LogTemp, Warning, TEXT("[Line %d] %s"), Line, *LineContent);\
+            if (Line == 0)\
             {\
-                UE_LOG(LogTemp, Warning, TEXT("[Line %d] %s"), Line, *LineContent);\
-                if (Line == 0)\
-                {\
-                    Line++;\
-                    continue;\
-                }\
-                TabDataStruct* TabDataIns = new TabDataStruct();\
-                TabDataIns->RegisterParams();\
-                TabDataIns->AddData(TabDatas, Line);\
-                Datas.Add(TabDataIns->GetKey(), *TabDataIns);\
                 Line++;\
+                continue;\
             }\
+            TabDataStruct* TabDataIns = new TabDataStruct();\
+            TabDataIns->RegisterParams();\
+            TabDataIns->AddData(TabDatas, Line);\
+            Datas.Add(TabDataIns->GetKey(), *TabDataIns);\
+            Line++;\
         }\
         UE_LOG(LogTemp, Warning, TEXT("[TabFileStruct TEST Print]"));\
         for (auto& Data : Datas)\

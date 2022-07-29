@@ -16,7 +16,7 @@ static void DoOption(Command* InCmd)
     printf("optional: %s\n", InCmd->Arg);
 }
 
-int main(int ArgC, const char** ArgV) 
+int main(int ArgC, const char** ArgV)
 {
     Command Cmd;
     Commander::Init(&Cmd, ArgV[0], "0.0.3");
@@ -25,12 +25,15 @@ int main(int ArgC, const char** ArgV)
     Commander::Option(&Cmd, "-o", "--optional [arg]", "optional arg", DoOption);
     Commander::Parse(&Cmd, ArgC, ArgV);
 
-	for (int i = 0; i < ArgC; ++i) {
-		printf("  - '%s'\n", ArgV[i]);
-	}
+    for (int i = 0; i < ArgC; ++i) {
+        printf("  - '%s'\n", ArgV[i]);
+    }
+
     printf("additional args:\n");
+
     for (int i = 0; i < Cmd.ArgC; ++i) {
         printf("  - '%s'\n", Cmd.ArgV[i]);
     }
+
     return 0;
 }

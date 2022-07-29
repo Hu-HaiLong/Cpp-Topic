@@ -16,18 +16,18 @@ int main()
 
         for (int j = 0; j < PushCount; j++)
         {
-            Buffer->Push(Data, Length);    // ÒªÖ§³Ö×Ô¶¯À©Èİ
+            Buffer->Push(Data, Length);    // è¦æ”¯æŒè‡ªåŠ¨æ‰©å®¹
         }
 
         char Out[128];
-        
+
         int PopCount = rand() % 10;
 
         for (int j = 0; j < PopCount; j++)
         {
-            Buffer->Pop(&Out[0], sizeof(Out));   // ÒªÖ§³Ö×Ô¶¯ËõÈİ
+            Buffer->Pop(&Out[0], sizeof(Out));   // è¦æ”¯æŒè‡ªåŠ¨ç¼©å®¹
         }
     }
 
-	return 0;
+    return 0;
 }

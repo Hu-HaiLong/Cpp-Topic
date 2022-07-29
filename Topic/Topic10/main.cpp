@@ -25,13 +25,15 @@ int main(int ArgC, const char** ArgV)
     Commander::Option(&Cmd, "-o", "--optional [arg]", "optional arg", DoOption);
     Commander::Parse(&Cmd, ArgC, ArgV);
 
-    for (int i = 0; i < ArgC; ++i) {
+    for (int i = 0; i < ArgC; ++i) 
+    {
         printf("  - '%s'\n", ArgV[i]);
     }
 
     printf("additional args:\n");
 
-    for (int i = 0; i < Cmd.ArgC; ++i) {
+    for (int i = 0; i < Cmd.ArgC; ++i) 
+    {
         printf("  - '%s'\n", Cmd.ArgV[i]);
     }
 

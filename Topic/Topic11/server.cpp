@@ -4,111 +4,119 @@
 #include <Windows.h>
 #include <string>
 
-//²ÉÓÃselectÊµÏÖ¶à¸öÁ¬½ÓÍ¬Ê±´¦Àí
+//é‡‡ç”¨selectå®ç°å¤šä¸ªè¿æ¥åŒæ—¶å¤„ç†
 
 int main()
 {
 
-	//³õÊ¼»¯Windows Socket Application
-	WORD SockVersion = MAKEWORD(2, 2);
-	WSADATA WSAData;
+    //åˆå§‹åŒ–Windows Socket Application
+    WORD SockVersion = MAKEWORD(2, 2);
+    WSADATA WSAData;
 
-	//WinSockµÄ×¢²áº¯Êı,³õÊ¼»¯µ×²ãµÄWindows Sockets DLL
-	if (WSAStartup(SockVersion, &WSAData) != 0)
-		return 0;
+    //WinSockçš„æ³¨å†Œå‡½æ•°,åˆå§‹åŒ–åº•å±‚çš„Windows Sockets DLL
+    if (WSAStartup(SockVersion, &WSAData) != 0)
+    {
+        return 0;
+    }
 
-	//´´½¨·şÎñÆ÷¶Ë¼àÌıÌ×½Ó×Ö 
-	SOCKET ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (ServerSocket == INVALID_SOCKET)
-	{
-		std::cout << " create socket error!" << std::endl;
-		return 0;
-	}
+    //åˆ›å»ºæœåŠ¡å™¨ç«¯ç›‘å¬å¥—æ¥å­— 
+    SOCKET ServerSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-	//°ó¶¨IPºÍ¶Ë¿Ú  	
-	sockaddr_in ServerAddr;
-	ServerAddr.sin_family= AF_INET;
-	ServerAddr.sin_port= htons(8888);//Ö¸¶¨¶Ë¿Ú,½«¶Ë¿ÚºÅ×ª»»ÎªÍøÂç×Ö½ÚË³Ğò
-	ServerAddr.sin_addr.S_un.S_addr= INADDR_ANY;
+    if (ServerSocket == INVALID_SOCKET)
+    {
+        std::cout << " create socket error!" << std::endl;
+        return 0;
+    }
 
-	//bind()°Ñsocket°ó¶¨µ½ÌØ¶¨µÄÍøÂçµØÖ·ÉÏ
-	if (bind(ServerSocket, (LPSOCKADDR) &ServerAddr, sizeof(ServerAddr)) == SOCKET_ERROR)
-	{
-		std::cout << " bind error!" << std::endl;
-		return 0;
-	}
+    //ç»‘å®šIPå’Œç«¯å£  	
+    sockaddr_in ServerAddr;
+    ServerAddr.sin_family = AF_INET;
+    ServerAddr.sin_port = htons(8888);//æŒ‡å®šç«¯å£,å°†ç«¯å£å·è½¬æ¢ä¸ºç½‘ç»œå­—èŠ‚é¡ºåº
+    ServerAddr.sin_addr.S_un.S_addr = INADDR_ANY;
 
-	//¿ªÊ¼¼àÌı
-	if (listen(ServerSocket, 5) == SOCKET_ERROR)
-	{
-		std::cout << " listen error !" << std::endl;
-		return 0;
-	}
+    //bind()æŠŠsocketç»‘å®šåˆ°ç‰¹å®šçš„ç½‘ç»œåœ°å€ä¸Š
+    if (bind(ServerSocket, (LPSOCKADDR)&ServerAddr, sizeof(ServerAddr)) == SOCKET_ERROR)
+    {
+        std::cout << " bind error!" << std::endl;
+        return 0;
+    }
 
-	std::cout << " ·şÎñÆ÷¿ªÆô³É¹¦" << std::endl;
+    //å¼€å§‹ç›‘å¬
+    if (listen(ServerSocket, 5) == SOCKET_ERROR)
+    {
+        std::cout << " listen error !" << std::endl;
+        return 0;
+    }
 
-	FD_SET ReadSet;//´´½¨ÎÄ¼şÃèÊö¼¯ºÏ
-	FD_ZERO(&ReadSet);//Çå¿ÕÎÄ¼şÃèÊö¼¯ºÏ
-	FD_SET(ServerSocket, &ReadSet);//½«¼àÌıÌ×½Ó×Ö·ÅÈëÎÄ¼şÃèÊö¼¯ºÏ
-	timeval TimeOut{ 0,0 };//select³¬Ê±ÉèÖÃ
-	
-	FD_SET TmpSet;
+    std::cout << " æœåŠ¡å™¨å¼€å¯æˆåŠŸ" << std::endl;
 
-	while (true)
-	{
-		FD_ZERO(&TmpSet);
-		TmpSet = ReadSet;
+    FD_SET ReadSet;//åˆ›å»ºæ–‡ä»¶æè¿°é›†åˆ
+    FD_ZERO(&ReadSet);//æ¸…ç©ºæ–‡ä»¶æè¿°é›†åˆ
+    FD_SET(ServerSocket, &ReadSet);//å°†ç›‘å¬å¥—æ¥å­—æ”¾å…¥æ–‡ä»¶æè¿°é›†åˆ
+    timeval TimeOut{ 0,0 };//selectè¶…æ—¶è®¾ç½®
+    FD_SET TmpSet;
 
-		//¼ì²éÎÄ¼şÃèÊö¼¯ºÏÖĞµÄsocket×´Ì¬ÊÇ·ñ¾ÍĞ÷
-		int Result = select(0, &TmpSet, nullptr, nullptr, &TimeOut);//µÚÎå²ÎÊı nullptrÎª×èÈûÄ£Ê½,Ê±¼äÎª0ÔòÎª·Ç×èÈûÄ£Ê½
-		if (Result == SOCKET_ERROR)
-		{
-			continue;
-		}
+    while (true)
+    {
+        FD_ZERO(&TmpSet);
+        TmpSet = ReadSet;
 
-		for (size_t i = 0; i < TmpSet.fd_count; i++)
-		{
-			SOCKET CurSocket = TmpSet.fd_array[i];
-			if (CurSocket == ServerSocket)//¼àÌıÌ×½Ó×ÖÓĞ¾ÍĞ÷
-			{
-				//Ñ­»·½ÓÊÕÊı¾İ
-				SOCKET CurClientSocket;
-				sockaddr_in RemoteAddr;
-				int AddrLen = sizeof(RemoteAddr);
-				//½ÓÊÕÒ»¸öÁ¬½ÓÇëÇó,²¢ĞÂ½¨Ò»¸ösocket,Ô­À´µÄsocket·µ»Ø¼àÌı×´Ì¬
-				CurClientSocket = accept(ServerSocket, (SOCKADDR*)&RemoteAddr, &AddrLen);
-				if (CurClientSocket == INVALID_SOCKET)
-				{
-					std::cout << " accept error !" << std::endl;
-					continue;
-				}
-				//inet_ntoa()°Ñ³¤ÕûĞÍµÄIPµØÖ·Êı¾İ×ª»»³Éµã·ÖÊ®½øÖÆµÄASCII×Ö·û´®	
-				std::cout << " ½ÓÊÜÒ»¸öÁ¬½Ó: " << inet_ntoa(RemoteAddr.sin_addr)<< " :" << RemoteAddr.sin_port<< std::endl;
-				FD_SET(CurClientSocket, &ReadSet);
-			}
-			else
-			{
-				//¿Í»§¶ËÁ¬½ÓµÄsocket
-				char Msg[10000];
-				int Result = recv(CurSocket, Msg, 10000, 0);//½ÓÊÕÊı¾İ
-				if (Result == SOCKET_ERROR || Result == 0)
-				{
-					closesocket(CurSocket);
-					FD_CLR(CurSocket, &ReadSet);
-					std::cout << " ½áÊøÒ»¸öÁ¬½Ó" << std::endl;
-				}
-				else
-				{
-					std::cout << " ½ÓÊÕµ½Êı¾İ:" << Msg << std::endl;
-				}
-			}
-		}
-		Sleep(100);
-	}
+        //æ£€æŸ¥æ–‡ä»¶æè¿°é›†åˆä¸­çš„socketçŠ¶æ€æ˜¯å¦å°±ç»ª
+        int Result = select(0, &TmpSet, nullptr, nullptr, &TimeOut);//ç¬¬äº”å‚æ•° nullpträ¸ºé˜»å¡æ¨¡å¼,æ—¶é—´ä¸º0åˆ™ä¸ºéé˜»å¡æ¨¡å¼
 
-	closesocket(ServerSocket);
-	//winsockµÄ×¢Ïúº¯Êı,´Óµ×²ãµÄWindows Sockets DLL ÖĞ³·Ïú×¢²á
-	WSACleanup();
-	system("pause");
-	return 0;
+        if (Result == SOCKET_ERROR)
+        {
+            continue;
+        }
+
+        for (size_t i = 0; i < TmpSet.fd_count; i++)
+        {
+            SOCKET CurSocket = TmpSet.fd_array[i];
+
+            if (CurSocket == ServerSocket)//ç›‘å¬å¥—æ¥å­—æœ‰å°±ç»ª
+            {
+                //å¾ªç¯æ¥æ”¶æ•°æ®
+                SOCKET CurClientSocket;
+                sockaddr_in RemoteAddr;
+                int AddrLen = sizeof(RemoteAddr);
+                //æ¥æ”¶ä¸€ä¸ªè¿æ¥è¯·æ±‚,å¹¶æ–°å»ºä¸€ä¸ªsocket,åŸæ¥çš„socketè¿”å›ç›‘å¬çŠ¶æ€
+                CurClientSocket = accept(ServerSocket, (SOCKADDR*)&RemoteAddr, &AddrLen);
+
+                if (CurClientSocket == INVALID_SOCKET)
+                {
+                    std::cout << " accept error !" << std::endl;
+                    continue;
+                }
+
+                //inet_ntoa()æŠŠé•¿æ•´å‹çš„IPåœ°å€æ•°æ®è½¬æ¢æˆç‚¹åˆ†åè¿›åˆ¶çš„ASCIIå­—ç¬¦ä¸²	
+                std::cout << " æ¥å—ä¸€ä¸ªè¿æ¥: " << inet_ntoa(RemoteAddr.sin_addr) << " :" << RemoteAddr.sin_port << std::endl;
+                FD_SET(CurClientSocket, &ReadSet);
+            }
+            else
+            {
+                //å®¢æˆ·ç«¯è¿æ¥çš„socket
+                char Msg[10000];
+                int Result = recv(CurSocket, Msg, 10000, 0);//æ¥æ”¶æ•°æ®
+
+                if (Result == SOCKET_ERROR || Result == 0)
+                {
+                    closesocket(CurSocket);
+                    FD_CLR(CurSocket, &ReadSet);
+                    std::cout << " ç»“æŸä¸€ä¸ªè¿æ¥" << std::endl;
+                }
+                else
+                {
+                    std::cout << " æ¥æ”¶åˆ°æ•°æ®:" << Msg << std::endl;
+                }
+            }
+        }
+
+        Sleep(100);
+    }
+
+    closesocket(ServerSocket);
+    //winsockçš„æ³¨é”€å‡½æ•°,ä»åº•å±‚çš„Windows Sockets DLL ä¸­æ’¤é”€æ³¨å†Œ
+    WSACleanup();
+    system("pause");
+    return 0;
 }

@@ -8,58 +8,62 @@
 
 int main()
 {
-	//³õÊ¼»¯Windows Socket Application
-	WORD SockVersion = MAKEWORD(2, 2);
-	WSADATA WSAData;
+    //åˆå§‹åŒ–Windows Socket Application
+    WORD SockVersion = MAKEWORD(2, 2);
+    WSADATA WSAData;
 
-	//WinSockµÄ×¢²áº¯Êı,³õÊ¼»¯µ×²ãµÄWindows Sockets DLL
-	if (WSAStartup(SockVersion, &WSAData) != 0)
-		return 0;
+    //WinSockçš„æ³¨å†Œå‡½æ•°,åˆå§‹åŒ–åº•å±‚çš„Windows Sockets DLL
+    if (WSAStartup(SockVersion, &WSAData) != 0)
+    {
+        return 0;
+    }
 
-	// ´´½¨Ò»¸ösocket²¢·µ»ØsocketµÄ±êÊ¶·û
-	SOCKET ClientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (ClientSocket == INVALID_SOCKET)
-	{
-		std::cout << "invalid socket!" << std::endl;
-		return 0;
-	}
+    // åˆ›å»ºä¸€ä¸ªsocketå¹¶è¿”å›socketçš„æ ‡è¯†ç¬¦
+    SOCKET ClientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-	// IP ¶Ë¿Ú
-	sockaddr_in ServerAddr;
-	ServerAddr.sin_family = AF_INET;
-	ServerAddr.sin_port = htons(8888);
-	ServerAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
+    if (ClientSocket == INVALID_SOCKET)
+    {
+        std::cout << "invalid socket!" << std::endl;
+        return 0;
+    }
 
-	// Á¬½Ó
-	if (connect(ClientSocket, (sockaddr*)& ServerAddr, sizeof(ServerAddr))  == SOCKET_ERROR)
-	{
-		//Á¬½ÓÊ§°Ü 	
-		std::cout << "connect error !" << std::endl;
-		closesocket(ClientSocket);
-		return 0;
-	}
+    // IP ç«¯å£
+    sockaddr_in ServerAddr;
+    ServerAddr.sin_family = AF_INET;
+    ServerAddr.sin_port = htons(8888);
+    ServerAddr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
 
-	std::string Data = "";
+    // è¿æ¥
+    if (connect(ClientSocket, (sockaddr*)&ServerAddr, sizeof(ServerAddr)) == SOCKET_ERROR)
+    {
+        //è¿æ¥å¤±è´¥ 	
+        std::cout << "connect error !" << std::endl;
+        closesocket(ClientSocket);
+        return 0;
+    }
 
-	int Index = 1;
-	while (1)
-	{
-		std::cout << "Input: ";
-		std::cin >> Data;
+    std::string Data = "";
+    int Index = 1;
 
-		send(ClientSocket, Data.c_str(), 100, 0);//Ò»´Î·¢ËÍ¶à,½ÓÊÕÉÙ
+    while (1)
+    {
+        std::cout << "Input: ";
+        std::cin >> Data;
 
-		if (Index++ >= 5)
-		{
-			break;
-		}
+        send(ClientSocket, Data.c_str(), 100, 0);//ä¸€æ¬¡å‘é€å¤š,æ¥æ”¶å°‘
 
-		Sleep(1000);
-	}
+        if (Index++ >= 5)
+        {
+            break;
+        }
 
-	//¹Ø±Õ
-	closesocket(ClientSocket);
-	WSACleanup();
-	system("pause");
-	return 0;
+        Sleep(1000);
+    }
+
+    //å…³é—­
+    closesocket(ClientSocket);
+    WSACleanup();
+    system("pause");
+
+    return 0;
 }

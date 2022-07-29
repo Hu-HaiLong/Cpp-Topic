@@ -6,7 +6,7 @@
 
 void print_out(const wchar_t* output)
 {
-	printf("%ls", output);
+    printf("%ls", output);
 }
 
 // Just some sample JSON text, feel free to change but could break demo
@@ -28,103 +28,109 @@ const wchar_t* EXAMPLE = L"\
 // Example 1
 void example1()
 {
-	// Parse example data
-	JSONValue* value = JSON::Parse(EXAMPLE);
+    // Parse example data
+    JSONValue* value = JSON::Parse(EXAMPLE);
 
-	// Did it go wrong?
-	if (value == NULL)
-	{
-		print_out(L"Example code failed to parse, did you change it?\r\n");
-	}
-	else
-	{
-		// Retrieve the main object
-		JSONObject root;
-		if (value->IsObject() == false)
-		{
-			print_out(L"The root element is not an object, did you change the example?\r\n");
-		}
-		else
-		{
-			root = value->AsObject();
+    // Did it go wrong?
+    if (value == NULL)
+    {
+        print_out(L"Example code failed to parse, did you change it?\r\n");
+    }
+    else
+    {
+        // Retrieve the main object
+        JSONObject root;
+        if (value->IsObject() == false)
+        {
+            print_out(L"The root element is not an object, did you change the example?\r\n");
+        }
+        else
+        {
+            root = value->AsObject();
 
-			// Retrieving a string
-			if (root.find(L"string_name") != root.end() && root[L"string_name"]->IsString())
-			{
-				print_out(L"string_name:\r\n");
-				print_out(L"------------\r\n");
-				print_out(root[L"string_name"]->AsString().c_str());
-				print_out(L"\r\n\r\n");
-			}
+            // Retrieving a string
+            if (root.find(L"string_name") != root.end() && root[L"string_name"]->IsString())
+            {
+                print_out(L"string_name:\r\n");
+                print_out(L"------------\r\n");
+                print_out(root[L"string_name"]->AsString().c_str());
+                print_out(L"\r\n\r\n");
+            }
 
-			// Retrieving a boolean
-			if (root.find(L"bool_second") != root.end() && root[L"bool_second"]->IsBool())
-			{
-				print_out(L"bool_second:\r\n");
-				print_out(L"------------\r\n");
-				print_out(root[L"bool_second"]->AsBool() ? L"it's true!" : L"it's false!");
-				print_out(L"\r\n\r\n");
-			}
+            // Retrieving a boolean
+            if (root.find(L"bool_second") != root.end() && root[L"bool_second"]->IsBool())
+            {
+                print_out(L"bool_second:\r\n");
+                print_out(L"------------\r\n");
+                print_out(root[L"bool_second"]->AsBool() ? L"it's true!" : L"it's false!");
+                print_out(L"\r\n\r\n");
+            }
 
-			// Retrieving an array
-			if (root.find(L"array_letters") != root.end() && root[L"array_letters"]->IsArray())
-			{
-				JSONArray array = root[L"array_letters"]->AsArray();
-				print_out(L"array_letters:\r\n");
-				print_out(L"--------------\r\n");
-				for (unsigned int i = 0; i < array.size(); i++)
-				{
-					wstringstream output;
-					output << L"[" << i << L"] => " << array[i]->Stringify() << L"\r\n";
-					print_out(output.str().c_str());
-				}
-				print_out(L"\r\n");
-			}
+            // Retrieving an array
+            if (root.find(L"array_letters") != root.end() && root[L"array_letters"]->IsArray())
+            {
+                JSONArray array = root[L"array_letters"]->AsArray();
+                print_out(L"array_letters:\r\n");
+                print_out(L"--------------\r\n");
 
-			// Retrieving nested object
-			if (root.find(L"sub_object") != root.end() && root[L"sub_object"]->IsObject())
-			{
-				print_out(L"sub_object:\r\n");
-				print_out(L"-----------\r\n");
-				print_out(root[L"sub_object"]->Stringify().c_str());
-				print_out(L"\r\n\r\n");
-			}
-		}
+                for (unsigned int i = 0; i < array.size(); i++)
+                {
+                    wstringstream output;
+                    output << L"[" << i << L"] => " << array[i]->Stringify() << L"\r\n";
+                    print_out(output.str().c_str());
+                }
 
-		delete value;
-	}
+                print_out(L"\r\n");
+            }
+
+            // Retrieving nested object
+            if (root.find(L"sub_object") != root.end() && root[L"sub_object"]->IsObject())
+            {
+                print_out(L"sub_object:\r\n");
+                print_out(L"-----------\r\n");
+                print_out(root[L"sub_object"]->Stringify().c_str());
+                print_out(L"\r\n\r\n");
+            }
+        }
+
+        delete value;
+    }
 }
 
 // Example 2
 void example2()
 {
-	JSONObject root;
+    JSONObject root;
 
-	// Adding a string
-	root[L"test_string"] = new JSONValue(L"hello world");
+    // Adding a string
+    root[L"test_string"] = new JSONValue(L"hello world");
 
-	// Create a random integer array
-	JSONArray array;
-	srand((unsigned)time(0));
-	for (int i = 0; i < 10; i++)
-		array.push_back(new JSONValue((double)(rand() % 100)));
-	root[L"sample_array"] = new JSONValue(array);
+    // Create a random integer array
+    JSONArray array;
+    srand((unsigned)time(0));
 
-	// Create a value
-	JSONValue* value = new JSONValue(root);
+    for (int i = 0; i < 10; i++)
+    {
+        array.push_back(new JSONValue((double)(rand() % 100)));
+    }
 
-	// Print it
-	print_out(value->Stringify().c_str());
+    root[L"sample_array"] = new JSONValue(array);
 
-	// Clean up
-	delete value;
+    // Create a value
+    JSONValue* value = new JSONValue(root);
+
+    // Print it
+    print_out(value->Stringify().c_str());
+
+    // Clean up
+    delete value;
 }
 
 // Example 3 : compact vs. prettyprint
 void example3()
 {
-	const wchar_t* EXAMPLE3 =
-		L"{\
+    const wchar_t* EXAMPLE3 =
+        L"{\
 	 \"SelectedTab\":\"Math\",\
 	 	\"Widgets\":[\
 			{\"WidgetPosition\":[0,369,800,582],\"WidgetIndex\":1,\"WidgetType\":\"WidgetCheckbox.1\"},\
@@ -138,78 +144,81 @@ void example3()
 		]\
 	 }";
 
-	// Parse example data
-	JSONValue* value = JSON::Parse(EXAMPLE3);
-	if (value)
-	{
-		print_out(L"-----------\r\n");
-		print_out(value->Stringify().c_str());
-		print_out(L"\r\n");
-		print_out(L"-----------\r\n");
-		print_out(value->Stringify(true).c_str());
-		print_out(L"\r\n");
-		print_out(L"-----------\r\n");
-	}
+    // Parse example data
+    JSONValue* value = JSON::Parse(EXAMPLE3);
 
-	// Clean up
-	delete value;
+    if (value)
+    {
+        print_out(L"-----------\r\n");
+        print_out(value->Stringify().c_str());
+        print_out(L"\r\n");
+        print_out(L"-----------\r\n");
+        print_out(value->Stringify(true).c_str());
+        print_out(L"\r\n");
+        print_out(L"-----------\r\n");
+    }
+
+    // Clean up
+    delete value;
 }
 
 // Example 4 : List keys in an object.
 void example4()
 {
-	// Parse the example.
-	JSONValue* main_object = JSON::Parse(EXAMPLE);
-	if (main_object == NULL)
-	{
-		print_out(L"Example code failed to parse, did you change it?\r\n");
-	}
-	else if (!main_object->IsObject())
-	{
-		print_out(L"Example code is not an object, did you change it?\r\n");
-		delete main_object;
-	}
-	else
-	{
-		// Print the main object.
-		print_out(L"Main object:\r\n");
-		print_out(main_object->Stringify(true).c_str());
-		print_out(L"-----------\r\n");
+    // Parse the example.
+    JSONValue* main_object = JSON::Parse(EXAMPLE);
+    if (main_object == NULL)
+    {
+        print_out(L"Example code failed to parse, did you change it?\r\n");
+    }
+    else if (!main_object->IsObject())
+    {
+        print_out(L"Example code is not an object, did you change it?\r\n");
+        delete main_object;
+    }
+    else
+    {
+        // Print the main object.
+        print_out(L"Main object:\r\n");
+        print_out(main_object->Stringify(true).c_str());
+        print_out(L"-----------\r\n");
 
-		// Fetch the keys and print them out.
-		vector<wstring> keys = main_object->ObjectKeys();
+        // Fetch the keys and print them out.
+        vector<wstring> keys = main_object->ObjectKeys();
 
-		vector<wstring>::iterator iter = keys.begin();
+        vector<wstring>::iterator iter = keys.begin();
 
-		while (iter != keys.end())
-		{
-			print_out(L"Key: ");
-			print_out((*iter).c_str());
-			print_out(L"\r\n");
+        while (iter != keys.end())
+        {
+            print_out(L"Key: ");
+            print_out((*iter).c_str());
+            print_out(L"\r\n");
 
-			// Get the key's value.
-			JSONValue* key_value = main_object->GetChild((*iter).c_str());
-			if (key_value)
-			{
-				print_out(L"Value: ");
-				print_out(key_value->Stringify().c_str());
-				print_out(L"\r\n");
-				print_out(L"-----------\r\n");
-			}
+            // Get the key's value.
+            JSONValue* key_value = main_object->GetChild((*iter).c_str());
 
-			// Next key.
-			iter++;
-		}
+            if (key_value)
+            {
+                print_out(L"Value: ");
+                print_out(key_value->Stringify().c_str());
+                print_out(L"\r\n");
+                print_out(L"-----------\r\n");
+            }
 
-		delete main_object;
-	}
+            // Next key.
+            iter++;
+        }
+
+        delete main_object;
+    }
 }
 
 int main()
 {
-	example1();
-	example2();
-	example3();
-	example4();
-	return 0;
+    example1();
+    example2();
+    example3();
+    example4();
+
+    return 0;
 }

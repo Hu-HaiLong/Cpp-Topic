@@ -13,6 +13,7 @@ public:
     {
         std::cout << "  Test1  " << std::endl;
     }
+
     static void Test2(void* Params)
     {
         std::cout << "  Test2  " << *(int*)Params << std::endl;
@@ -32,7 +33,7 @@ void Test3()
     std::cout << *P1 << std::endl;
 
     Binder.CallFunc(&T1, "Test1", nullptr);
-    
+
     int TestA = 666;
     Binder.CallStaticFunc("Test2", &TestA);
 }
@@ -40,4 +41,6 @@ void Test3()
 int main()
 {
     Test3();
+
+    return 0;
 }

@@ -4,23 +4,23 @@ using namespace std;
 
 int main()
 {
-	auto Str1 = CustomString("test1");
-	auto Str2 = CustomString("test2,test3");
-	auto Str3 = Str2;
+    auto Str1 = CustomString("test1");
+    auto Str2 = CustomString("test2,test3");
+    auto Str3 = Str2;
 
-	Str1 = "test3";
+    Str1 = "test3";
 
-	int Len = Str1.Len();
+    int Len = Str1.Len();
 
-	CustomString Sub1 = Str1.Sub(1, 2);
+    CustomString Sub1 = Str1.Sub(1, 2);
 
-	Str1.Append("append");
+    Str1.Append("append");
 
-	bool bEqual = Str1 == Str2;
+    bool bEqual = Str1 == Str2;
 
-	int Index = Str1.Find("es");
+    int Index = Str1.Find("es");
 
-	CustomString* Ret = Str2.Split(",");
-	
-	return 0;
+    CustomString* Ret = Str2.Split(",");
+
+    return 0;
 }

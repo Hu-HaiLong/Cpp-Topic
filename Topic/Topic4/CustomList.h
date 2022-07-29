@@ -8,150 +8,152 @@ template <typename P>
 class Node
 {
 public:
-	Node() {}
+    Node() {}
 
-	Node* Pre = nullptr;
-	Node* Next = nullptr;
-	
-	void SetData(P Data) {
-		this->Data = Data;
-	}
+    Node* Pre = nullptr;
+    Node* Next = nullptr;
 
-	P GetData() 
-	{
-		return this->Data;
-	}
+    void SetData(P Data) {
+        this->Data = Data;
+    }
+
+    P GetData()
+    {
+        return this->Data;
+    }
 
 private:
-	P Data = P(0);
+    P Data = P(0);
 };
 
 template <typename T = int>
 class CustomList
 {
 public:
-	CustomList(const CustomList& List)
-	{
-		this->Size = List.Size;
-		memcpy(this->Head, List.Head, this->Size * sizeof(T) + 1);
-	}
+    CustomList(const CustomList& List)
+    {
+        this->Size = List.Size;
+        memcpy(this->Head, List.Head, this->Size * sizeof(T) + 1);
+    }
 
-	CustomList()
-	{
-		Head = new Node<T>();
-		Head->Pre = nullptr;
-		Head->Next = nullptr;
-		Head->SetData(NULL);
-	}
+    CustomList()
+    {
+        Head = new Node<T>();
+        Head->Pre = nullptr;
+        Head->Next = nullptr;
+        Head->SetData(NULL);
+    }
 
-	~CustomList() 
-	{
-		PopAll();
-	}
+    ~CustomList()
+    {
+        PopAll();
+    }
 
-	Node<T>* Push(T Data)
-	{
-		Node<T>* NewOne = new Node<T>();
-		NewOne->SetData(Data);
-		
-		if (Size == 0) {
-			Head->Next = NewOne;
-			NewOne->Pre = Head;
-			Size++;
-			return NewOne;
-		}
+    Node<T>* Push(T Data)
+    {
+        Node<T>* NewOne = new Node<T>();
+        NewOne->SetData(Data);
 
-		NewOne->Next = Head->Next;
-		NewOne->Pre = Head;
-		Head->Next->Pre = NewOne;
-		Head->Next = NewOne;
+        if (Size == 0) {
+            Head->Next = NewOne;
+            NewOne->Pre = Head;
+            Size++;
+            return NewOne;
+        }
 
-		Size++;
-		return NewOne;
-	}
+        NewOne->Next = Head->Next;
+        NewOne->Pre = Head;
+        Head->Next->Pre = NewOne;
+        Head->Next = NewOne;
 
-	Node<T>* Insert(Node<T>* Pos, T Value)
-	{
-		if (Pos == nullptr)
-		{
-			return nullptr;
-		}
-		Node<T>* PreNode = new Node<T>();
-		Node<T>* NewOne = new Node<T>();
+        Size++;
+        return NewOne;
+    }
 
-		PreNode = Pos->Pre;
-		NewOne->Next = Pos;
-		Pos->Pre = NewOne;
-		PreNode->Next = NewOne;
-		NewOne->Pre = PreNode;
-		NewOne->SetData(Value);
+    Node<T>* Insert(Node<T>* Pos, T Value)
+    {
+        if (Pos == nullptr)
+        {
+            return nullptr;
+        }
 
-		Size++;
-		return NewOne;
-	}
+        Node<T>* PreNode = new Node<T>();
+        Node<T>* NewOne = new Node<T>();
 
-	Node<T>* Find(const T& Data)
-	{
-		Node<T>* CurNode = Head;
-		int CurCount = 0;
+        PreNode = Pos->Pre;
+        NewOne->Next = Pos;
+        Pos->Pre = NewOne;
+        PreNode->Next = NewOne;
+        NewOne->Pre = PreNode;
+        NewOne->SetData(Value);
 
-		while (CurCount <= Size)
-		{
-			if (CurNode->GetData() == Data)
-			{
-				return CurNode;
-			}
-			CurNode = CurNode->Next;
-			CurCount++;
-		}
+        Size++;
+        return NewOne;
+    }
 
-		return nullptr;
-	}
+    Node<T>* Find(const T& Data)
+    {
+        Node<T>* CurNode = Head;
+        int CurCount = 0;
 
-	void Remove(Node<T>* Node)
-	{
-		if (Node == nullptr)
-		{
-			return;
-		}
+        while (CurCount <= Size)
+        {
+            if (CurNode->GetData() == Data)
+            {
+                return CurNode;
+            }
+            CurNode = CurNode->Next;
+            CurCount++;
+        }
 
-		Node->Pre->Next = Node->Next;
-		Node->Next->Pre = Node->Pre;
+        return nullptr;
+    }
 
-		Node->Next = Node->Pre = nullptr;
-		delete Node;
-		Size--;	
-	}
+    void Remove(Node<T>* Node)
+    {
+        if (Node == nullptr)
+        {
+            return;
+        }
 
-	void PopAll()
-	{
-		Node<T>* Temp = new Node<T>();
+        Node->Pre->Next = Node->Next;
+        Node->Next->Pre = Node->Pre;
 
-		while (Head != nullptr)
-		{
-			Temp = Head->Next;
-			delete Head;
-			Head = Temp;
-		}
+        Node->Next = Node->Pre = nullptr;
+        delete Node;
+        Size--;
+    }
 
-		Size = 0;
-	}
+    void PopAll()
+    {
+        Node<T>* Temp = new Node<T>();
 
-	Node<T>* GetNode(int Index) {
-		Node<T>* CurNode = Head;
-		int CurCount = 0;
+        while (Head != nullptr)
+        {
+            Temp = Head->Next;
+            delete Head;
+            Head = Temp;
+        }
 
-		while (CurCount < Index)
-		{
-			CurNode = CurNode->Next;
-			CurCount++;
-		}
+        Size = 0;
+    }
 
-		return CurNode;
-	}
+    Node<T>* GetNode(int Index) 
+    {
+        Node<T>* CurNode = Head;
+        int CurCount = 0;
+
+        while (CurCount < Index)
+        {
+            CurNode = CurNode->Next;
+            CurCount++;
+        }
+
+        return CurNode;
+    }
 
 private:
-	int Size = 0;
-	Node<T>* Head;
+    int Size = 0;
+    Node<T>* Head;
 };
 

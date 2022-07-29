@@ -10,39 +10,39 @@ int32 UExportRootMotionCommandlet::Main(const FString& Params)
     UE_LOG(LogCommandletExample, Log, TEXT("Example commandlet begin to execute ."));
     UE_LOG(LogCommandletExample, Log, TEXT("Input Param: %s"), *Params);
 
-	TArray<FString> Tokens;
-	TArray<FString> Switches;
-	TMap<FString, FString> ParamsMap;
-	ParseCommandLine(*Params, Tokens, Switches, ParamsMap);
+    TArray<FString> Tokens;
+    TArray<FString> Switches;
+    TMap<FString, FString> ParamsMap;
+    ParseCommandLine(*Params, Tokens, Switches, ParamsMap);
 
-	const FString& TmpAnimPath = TEXT("AnimPath");
-	const FString& TmpFPS= TEXT("FPS");
+    const FString& TmpAnimPath = TEXT("AnimPath");
+    const FString& TmpFPS = TEXT("FPS");
 
-	if (!ParamsMap.Contains(TmpAnimPath))
-	{
-		return 0;
-	}
+    if (!ParamsMap.Contains(TmpAnimPath))
+    {
+        return 0;
+    }
 
-	FString AnimPath = ParamsMap[TmpAnimPath];
-	
-	UE_LOG(LogCommandletExample, Log, TEXT("Input Path: %s "), *AnimPath);
+    FString AnimPath = ParamsMap[TmpAnimPath];
 
-	UObjectLibrary* ObjectLibrary = UObjectLibrary::CreateLibrary(UAnimSequence::StaticClass(), false, GIsEditor);
-	ObjectLibrary->LoadAssetDataFromPath(AnimPath);
-	TArray<FAssetData> AssetDatas;
-	ObjectLibrary->GetAssetDataList(AssetDatas);
+    UE_LOG(LogCommandletExample, Log, TEXT("Input Path: %s "), *AnimPath);
 
-	TArray<UObject*> Objs;
-	UObject* Tmp;
+    UObjectLibrary* ObjectLibrary = UObjectLibrary::CreateLibrary(UAnimSequence::StaticClass(), false, GIsEditor);
+    ObjectLibrary->LoadAssetDataFromPath(AnimPath);
+    TArray<FAssetData> AssetDatas;
+    ObjectLibrary->GetAssetDataList(AssetDatas);
 
-	for (const FAssetData& AssetData : AssetDatas)
-	{
-		UE_LOG(LogCommandletExample, Log, TEXT("------- %s"), *AssetData.GetFullName());
-		Tmp = AssetData.GetAsset();
-		Objs.Add(Tmp);
-	}
+    TArray<UObject*> Objs;
+    UObject* Tmp;
 
-	URMBlueprintFunctionLibrary::ExportRootMotion(Objs);
+    for (const FAssetData& AssetData : AssetDatas)
+    {
+        UE_LOG(LogCommandletExample, Log, TEXT("------- %s"), *AssetData.GetFullName());
+        Tmp = AssetData.GetAsset();
+        Objs.Add(Tmp);
+    }
+
+    URMBlueprintFunctionLibrary::ExportRootMotion(Objs);
 
     return 0;
 }

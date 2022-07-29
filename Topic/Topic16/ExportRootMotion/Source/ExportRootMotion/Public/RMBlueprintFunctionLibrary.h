@@ -9,60 +9,58 @@
 USTRUCT()
 struct FAnimTrackStruct
 {
-	GENERATED_USTRUCT_BODY()
+    GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
-		float Time;
+    UPROPERTY()
+    float Time;
 
-	UPROPERTY()
-		float X;
+    UPROPERTY()
+    float X;
 
-	UPROPERTY()
-		float Y;
+    UPROPERTY()
+    float Y;
 
-	UPROPERTY()
-		float Z;
+    UPROPERTY()
+    float Z;
 
-	UPROPERTY()
-		float Yaw;
-
+    UPROPERTY()
+    float Yaw;
 };
 
 
 USTRUCT()
 struct FAnimStruct
 {
-	GENERATED_USTRUCT_BODY()
+    GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
-		FString Path;
+    UPROPERTY()
+    FString Path;
 
-	UPROPERTY()
-		FString AnimName;
+    UPROPERTY()
+    FString AnimName;
 
-	UPROPERTY()
-		TArray<FAnimTrackStruct> Data;
-
+    UPROPERTY()
+    TArray<FAnimTrackStruct> Data;
 };
 
 USTRUCT()
 struct FExportStruct
 {
-	GENERATED_USTRUCT_BODY()
+    GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
-		TArray<FAnimStruct> Data;
+    UPROPERTY()
+    TArray<FAnimStruct> Data;
 };
 
 /**
- * 
+ *
  */
 UCLASS()
 class EXPORTROOTMOTION_API URMBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "RootMotion")
-	static void ExportRootMotion(TArray<UObject*> Objs);
+    UFUNCTION(BlueprintCallable, Category = "RootMotion")
+    static void ExportRootMotion(TArray<UObject*> Objs);
 };

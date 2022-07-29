@@ -14,9 +14,8 @@ DEFINE_LOG_CATEGORY_STATIC(LogCommandletExample, Log, All);
 UCLASS()
 class EXPORTROOTMOTION_API UExportRootMotionCommandlet : public UCommandlet
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	virtual int32 Main(const FString& Params) override;
-
+    virtual int32 Main(const FString& Params) override;
 };

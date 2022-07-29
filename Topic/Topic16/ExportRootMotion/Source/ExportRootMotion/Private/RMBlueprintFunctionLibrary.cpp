@@ -7,9 +7,9 @@
 void URMBlueprintFunctionLibrary::ExportRootMotion(TArray<UObject*> Objs)
 {
     UE_LOG(LogCommandletExample, Log, TEXT("ExportRootMotion begin to execute ."));
-    
+
     FExportStruct Tmp;
-    
+
     for (auto Obj : Objs)
     {
         UAnimSequence* AnimS = Cast<UAnimSequence>(Obj);
@@ -32,7 +32,7 @@ void URMBlueprintFunctionLibrary::ExportRootMotion(TArray<UObject*> Objs)
         {
             UE_LOG(LogCommandletExample, Log, TEXT(" --  execute .  i : %d"), i);
             UE_LOG(LogCommandletExample, Log, TEXT(" --  X : %d  Y: %f  Z :%f Yaw :%f"), PosKeys[i].X, PosKeys[i].Y, PosKeys[i].Z, RotKeys[i].Rotator().Yaw);
-            
+
             FAnimTrackStruct TmpAnimTrack;
             TmpAnimTrack.Time = AnimS->GetTimeAtFrame(i);
             TmpAnimTrack.X = PosKeys[i].X;
@@ -45,8 +45,9 @@ void URMBlueprintFunctionLibrary::ExportRootMotion(TArray<UObject*> Objs)
 
         Tmp.Data.Add(TmpAnim);
     }
-    
+
     FString Json;
+
     if (FJsonObjectConverter::UStructToJsonObjectString(Tmp, Json))
     {
         FString FileLocation = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() + TEXT("RootMotion"));

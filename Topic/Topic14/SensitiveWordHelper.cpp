@@ -36,21 +36,21 @@ bool SensitiveWordHelper::Check(const char* Words)
         {
             return true;
         }
-        
+
         Words++;
     }
-    
+
     return false;
 }
 
 void SensitiveWordHelper::InitTree(const char* Words)
 {
     Node* CurNode = &Root;
-    
+
     while (*Words != '\0')
     {
         Node* NewNode = Find(CurNode->Children, *Words);
-        
+
         if (NewNode == nullptr)
         {
             NewNode = new Node();
@@ -69,20 +69,20 @@ void SensitiveWordHelper::InitTree(const char* Words)
 
 Node* SensitiveWordHelper::Find(Node** Nodes, char Word)
 {
-	if (Nodes == nullptr)
-	{
-		return nullptr;
-	}
+    if (Nodes == nullptr)
+    {
+        return nullptr;
+    }
 
-	for (int i = 0; i < MAX_NODE; i++)
-	{
-		if ((*Nodes)[i].Data == Word)
-		{
-			return &(*Nodes)[i];
-		}
-	}
+    for (int i = 0; i < MAX_NODE; i++)
+    {
+        if ((*Nodes)[i].Data == Word)
+        {
+            return &(*Nodes)[i];
+        }
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 void SensitiveWordHelper::Insert(Node** Nodes, Node* Node)

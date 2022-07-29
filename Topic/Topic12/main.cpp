@@ -3,16 +3,18 @@
 
 int main()
 {
-	auto m = new PosManager();
-	int blockSize = 100;
-	int mapSize = 10000;
-	m->Init(blockSize, mapSize);
+    auto m = new PosManager();
+    int blockSize = 100;
+    int mapSize = 10000;
+    m->Init(blockSize, mapSize);
 
-	int PoserID1 = 1;
-	int PoserID2 = 2;
-	m->Add(PoserID1, 100, 200);  // 100ÊÇºá×ø±ê£¬200×Ý×ø±ê
-	m->Add(PoserID2, 200, 300);
-	int* PoserIDs = m->Find(PoserID1);    // ÕÒµ½poseid1½ÅÏÂÒÔ¼°ÖÜÎ§8¸ñµÄËùÓÐid
-	m->Update(PoserID1, 300, 400);
-	m->Remove(PoserID2);
+    int PoserID1 = 1;
+    int PoserID2 = 2;
+    m->Add(PoserID1, 100, 200);  // 100æ˜¯æ¨ªåæ ‡ï¼Œ200çºµåæ ‡
+    m->Add(PoserID2, 200, 300);
+    int* PoserIDs = m->Find(PoserID1);    // æ‰¾åˆ°poseid1è„šä¸‹ä»¥åŠå‘¨å›´8æ ¼çš„æ‰€æœ‰id
+    m->Update(PoserID1, 300, 400);
+    m->Remove(PoserID2);
+
+    return 0;
 }

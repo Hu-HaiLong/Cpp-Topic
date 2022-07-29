@@ -7,12 +7,13 @@ void PosManager::Init(int InBlockSize, int InMapSize)
     MapSize = InMapSize;
     BlockSize = InBlockSize;
     int Size = MapSize / BlockSize;
-    
+
     Map = (int**)malloc(sizeof(int*) * Size * Size);
 
     for (int i = 0; i < Size * Size; i++)
     {
         Map[i] = (int*)malloc(sizeof(int) * MAX_POSER);
+
         for (int j = 0; j <= MAX_POSER; j++)
         {
             Map[i][j] = -1;
@@ -41,14 +42,14 @@ int* PosManager::Find(int PoserID)
     int BlockID = 0;
 
     FindPoserPos(X, Y, BlockID, PoserID);
-    
+
     if (X == -1 || Y == -1)
     {
         return Posers;
     }
 
     int Count = 0;
-    
+
     for (int i = X - 1; i <= X + 1; i++)
     {
         if (i < 0 || i > MapSize / BlockSize)
@@ -110,7 +111,7 @@ void PosManager::Remove(int PoserID)
             }
         }
     }
-    
+
     if (Index == -1)
     {
         return;
@@ -130,7 +131,7 @@ int PosManager::GetBlockID(int InX, int InY)
 int PosManager::InsertPoser(int* Poser, int PoserID)
 {
     int i = 0;
-    
+
     for (i = 0; i < MAX_POSER; i++)
     {
         if (Poser[i] == -1)
@@ -172,6 +173,7 @@ bool PosManager::FindPoserPos(int& X, int& Y, int& BlockID, int PoserID)
 
             X = i;
             Y = j;
+
             return true;
         }
     }

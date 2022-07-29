@@ -13,7 +13,7 @@ void TabFile::Load(const char* FileName)
 
         LineStream << Line;
         LineStream >> Key >> X >> Y;
-        
+
         Data[Key] = Line;
 
         cout << Key << X << Y;

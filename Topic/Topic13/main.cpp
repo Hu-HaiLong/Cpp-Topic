@@ -2,10 +2,12 @@
 
 int main()
 {
-	printf("sad");
-	auto Tab = new TabFile();
-	Tab->Load("xxxFile.txt");
-	auto lineData = Tab->Find("3");  // 每行的数据结构可以自己定一个固定的数据结构
+    printf("sad");
+    auto Tab = new TabFile();
+    Tab->Load("xxxFile.txt");
+    auto lineData = Tab->Find("3");  // 姣忚鐨勬暟鎹粨鏋勫彲浠ヨ嚜宸卞畾涓�涓浐瀹氱殑鏁版嵁缁撴瀯
 
-	system("pause");
+    system("pause");
+
+    return 0;
 }

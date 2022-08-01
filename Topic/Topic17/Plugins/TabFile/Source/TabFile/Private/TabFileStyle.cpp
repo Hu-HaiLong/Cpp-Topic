@@ -14,24 +14,24 @@ TSharedPtr<FSlateStyleSet> FTabFileStyle::StyleInstance = nullptr;
 
 void FTabFileStyle::Initialize()
 {
-	if (!StyleInstance.IsValid())
-	{
-		StyleInstance = Create();
-		FSlateStyleRegistry::RegisterSlateStyle(*StyleInstance);
-	}
+    if (!StyleInstance.IsValid())
+    {
+        StyleInstance = Create();
+        FSlateStyleRegistry::RegisterSlateStyle(*StyleInstance);
+    }
 }
 
 void FTabFileStyle::Shutdown()
 {
-	FSlateStyleRegistry::UnRegisterSlateStyle(*StyleInstance);
-	ensure(StyleInstance.IsUnique());
-	StyleInstance.Reset();
+    FSlateStyleRegistry::UnRegisterSlateStyle(*StyleInstance);
+    ensure(StyleInstance.IsUnique());
+    StyleInstance.Reset();
 }
 
 FName FTabFileStyle::GetStyleSetName()
 {
-	static FName StyleSetName(TEXT("TabFileStyle"));
-	return StyleSetName;
+    static FName StyleSetName(TEXT("TabFileStyle"));
+    return StyleSetName;
 }
 
 
@@ -40,22 +40,22 @@ const FVector2D Icon20x20(20.0f, 20.0f);
 
 TSharedRef< FSlateStyleSet > FTabFileStyle::Create()
 {
-	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("TabFileStyle"));
-	Style->SetContentRoot(IPluginManager::Get().FindPlugin("TabFile")->GetBaseDir() / TEXT("Resources"));
+    TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("TabFileStyle"));
+    Style->SetContentRoot(IPluginManager::Get().FindPlugin("TabFile")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("TabFile.PluginAction", new IMAGE_BRUSH_SVG(TEXT("PlaceholderButtonIcon"), Icon20x20));
-	return Style;
+    Style->Set("TabFile.PluginAction", new IMAGE_BRUSH_SVG(TEXT("PlaceholderButtonIcon"), Icon20x20));
+    return Style;
 }
 
 void FTabFileStyle::ReloadTextures()
 {
-	if (FSlateApplication::IsInitialized())
-	{
-		FSlateApplication::Get().GetRenderer()->ReloadTextureResources();
-	}
+    if (FSlateApplication::IsInitialized())
+    {
+        FSlateApplication::Get().GetRenderer()->ReloadTextureResources();
+    }
 }
 
 const ISlateStyle& FTabFileStyle::Get()
 {
-	return *StyleInstance;
+    return *StyleInstance;
 }

@@ -12,18 +12,18 @@ class FTabFileModule : public IModuleInterface
 {
 public:
 
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
-	
-	/** This function will be bound to Command. */
-	void PluginButtonClicked();
-	
-private:
+    /** IModuleInterface implementation */
+    virtual void StartupModule() override;
+    virtual void ShutdownModule() override;
 
-	void RegisterMenus();
-
+    /** This function will be bound to Command. */
+    void PluginButtonClicked();
 
 private:
-	TSharedPtr<class FUICommandList> PluginCommands;
+
+    void RegisterMenus();
+
+
+private:
+    TSharedPtr<class FUICommandList> PluginCommands;
 };

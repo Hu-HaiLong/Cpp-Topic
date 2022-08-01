@@ -6,7 +6,7 @@
 
 void FTabFileCommands::RegisterCommands()
 {
-	UI_COMMAND(PluginAction, "TabFile", "Execute TabFile action", EUserInterfaceActionType::Button, FInputChord());
+    UI_COMMAND(PluginAction, "TabFile", "Execute TabFile action", EUserInterfaceActionType::Button, FInputChord());
 }
 
 #undef LOCTEXT_NAMESPACE

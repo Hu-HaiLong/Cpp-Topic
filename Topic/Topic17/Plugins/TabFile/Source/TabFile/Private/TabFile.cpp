@@ -13,73 +13,73 @@ static const FName TabFileTabName("TabFile");
 
 void FTabFileModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
-	
-	FTabFileStyle::Initialize();
-	FTabFileStyle::ReloadTextures();
+    // This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 
-	FTabFileCommands::Register();
-	
-	PluginCommands = MakeShareable(new FUICommandList);
+    FTabFileStyle::Initialize();
+    FTabFileStyle::ReloadTextures();
 
-	PluginCommands->MapAction(
-		FTabFileCommands::Get().PluginAction,
-		FExecuteAction::CreateRaw(this, &FTabFileModule::PluginButtonClicked),
-		FCanExecuteAction());
+    FTabFileCommands::Register();
 
-	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FTabFileModule::RegisterMenus));
+    PluginCommands = MakeShareable(new FUICommandList);
+
+    PluginCommands->MapAction(
+        FTabFileCommands::Get().PluginAction,
+        FExecuteAction::CreateRaw(this, &FTabFileModule::PluginButtonClicked),
+        FCanExecuteAction());
+
+    UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FTabFileModule::RegisterMenus));
 }
 
 void FTabFileModule::ShutdownModule()
 {
-	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
-	// we call this function before unloading the module.
+    // This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
+    // we call this function before unloading the module.
 
-	UToolMenus::UnRegisterStartupCallback(this);
+    UToolMenus::UnRegisterStartupCallback(this);
 
-	UToolMenus::UnregisterOwner(this);
+    UToolMenus::UnregisterOwner(this);
 
-	FTabFileStyle::Shutdown();
+    FTabFileStyle::Shutdown();
 
-	FTabFileCommands::Unregister();
+    FTabFileCommands::Unregister();
 }
 
 void FTabFileModule::PluginButtonClicked()
 {
-	// Example Test
-	FSceneTabFile Test = FSceneTabFile();
+    // Example Test
+    FSceneTabFile Test = FSceneTabFile();
 
-	for (auto& Data : Test.GetDatas())
-	{
-		UE_LOG(LogTemp, Log, TEXT("Test:  %d, %s"), Data.Value.SceneId, *Data.Value.Descriptors);
-	}
+    for (auto& Data : Test.GetDatas())
+    {
+        UE_LOG(LogTemp, Log, TEXT("Test:  %d, %s"), Data.Value.SceneId, *Data.Value.Descriptors);
+    }
 }
 
 void FTabFileModule::RegisterMenus()
 {
-	// Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
-	FToolMenuOwnerScoped OwnerScoped(this);
+    // Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
+    FToolMenuOwnerScoped OwnerScoped(this);
 
-	{
-		UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
-		{
-			FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-			Section.AddMenuEntryWithCommandList(FTabFileCommands::Get().PluginAction, PluginCommands);
-		}
-	}
+    {
+        UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
+        {
+            FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
+            Section.AddMenuEntryWithCommandList(FTabFileCommands::Get().PluginAction, PluginCommands);
+        }
+    }
 
-	{
-		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar");
-		{
-			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
-			{
-				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FTabFileCommands::Get().PluginAction));
-				Entry.SetCommandList(PluginCommands);
-			}
-		}
-	}
+    {
+        UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar");
+        {
+            FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
+            {
+                FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FTabFileCommands::Get().PluginAction));
+                Entry.SetCommandList(PluginCommands);
+            }
+        }
+    }
 }
 
 #undef LOCTEXT_NAMESPACE
-	
+
 IMPLEMENT_MODULE(FTabFileModule, TabFile)

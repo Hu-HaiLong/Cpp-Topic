@@ -5,7 +5,6 @@ TAB_FILE_DATA(FSceneTabData)
 {
     int32 SceneId;
     FString Descriptors;
-    // FCustomType CustomValue; // 高级要求，可以支持自定义类型解析
 
     FSceneTabData()
         : SceneId(-1)
@@ -18,7 +17,6 @@ TAB_FILE_DATA(FSceneTabData)
     {
         TAB_FILE_DATA_REGISTER(SceneId, "SceneId");
         TAB_FILE_DATA_REGISTER(Descriptors, "Descriptors");
-        // TAB_FILE_DATA_REGISTER(CustomValue, "Custom");
     }
 };
 

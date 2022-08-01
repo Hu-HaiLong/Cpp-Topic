@@ -14,13 +14,59 @@
 struct TabFileStruct : public TabFileBase<TabDataStruct, TabFileStruct>\
 {\
     static inline FString TmpTabPath = TabPath;\
-\
+    \
     static FString GetFilePath()\
     {\
         return TmpTabPath;\
     }\
 };\
 
+
+template <typename TabDataStruct, typename TabFileStruct>
+struct TabFileBase
+{
+public:
+    TabFileBase();
+    virtual ~TabFileBase() {};
+
+    TMap<typename TabDataStruct::TYPE, TabDataStruct> GetDatas();
+
+private:
+    TMap<typename TabDataStruct::TYPE, TabDataStruct> Datas;
+};
+
+template <typename TabDataStruct, typename TabFileStruct>
+TabFileBase<TabDataStruct, TabFileStruct>::TabFileBase()
+{
+    FString TabFullPath = FPaths::ProjectDir() + TabFileStruct::GetFilePath();
+    if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*TabFullPath))
+    {
+        return;
+    }
+    TArray<FString> TabDatas;
+    FFileHelper::LoadFileToStringArray(TabDatas, *TabFullPath);
+    int32 Line = 0;
+    for (FString LineContent : TabDatas)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("[Line %d] %s"), Line, *LineContent);
+        if (Line == 0)
+        {
+            Line++;
+            continue;
+        }
+        TabDataStruct* TabDataIns = new TabDataStruct();
+        TabDataIns->RegisterParams();
+        TabDataIns->AddData(TabDatas, Line);
+        Datas.Add(TabDataIns->GetKey(), *TabDataIns);
+        Line++;
+    }
+}
+
+template <typename TabDataStruct, typename TabFileStruct>
+TMap<typename TabDataStruct::TYPE, TabDataStruct> TabFileBase<TabDataStruct, TabFileStruct>::GetDatas()
+{
+    return Datas;
+};
 
 struct FTabData
 {
@@ -77,50 +123,4 @@ void FTabData::Register(int32& Intance, const FString& Name)
 void FTabData::Register(FString& Intance, const FString& Name)
 {
     Str_Datas.Add(Name, &Intance);
-};
-
-template <typename TabDataStruct, typename TabFileStruct>
-struct TabFileBase
-{
-public:
-    TabFileBase();
-    virtual ~TabFileBase() {};
-
-    TMap<typename TabDataStruct::TYPE, TabDataStruct> GetDatas();
-
-private:
-    TMap<typename TabDataStruct::TYPE, TabDataStruct> Datas;
-};
-
-template <typename TabDataStruct, typename TabFileStruct>
-TabFileBase<TabDataStruct, TabFileStruct>::TabFileBase()
-{
-    FString TabFullPath = FPaths::ProjectDir() + TabFileStruct::GetFilePath();
-    if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*TabFullPath))
-    {
-        return;
-    }
-    TArray<FString> TabDatas;
-    FFileHelper::LoadFileToStringArray(TabDatas, *TabFullPath);
-    int32 Line = 0;
-    for (FString LineContent : TabDatas)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("[Line %d] %s"), Line, *LineContent);
-        if (Line == 0)
-        {
-            Line++;
-            continue;
-        }
-        TabDataStruct* TabDataIns = new TabDataStruct();
-        TabDataIns->RegisterParams();
-        TabDataIns->AddData(TabDatas, Line);
-        Datas.Add(TabDataIns->GetKey(), *TabDataIns);
-        Line++;
-    }
-}
-
-template <typename TabDataStruct, typename TabFileStruct>
-TMap<typename TabDataStruct::TYPE, TabDataStruct> TabFileBase<TabDataStruct, TabFileStruct>::GetDatas()
-{
-    return Datas;
 };

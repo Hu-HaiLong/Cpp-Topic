@@ -12,7 +12,6 @@ TAB_FILE_DATA(FSceneTabData)
 
     TAB_FILE_DATA_SINGLE_KEY(int32, SceneId);
 
-    // 高级要求，load整张表只调用一次
     virtual void RegisterParams() override
     {
         TAB_FILE_DATA_REGISTER(SceneId, "SceneId");

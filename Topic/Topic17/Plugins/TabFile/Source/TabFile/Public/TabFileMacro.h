@@ -21,7 +21,6 @@ struct TabFileStruct : public TabFileBase<TabDataStruct, TabFileStruct>\
     }\
 };\
 
-
 template <typename TabDataStruct, typename TabFileStruct>
 struct TabFileBase
 {
@@ -39,21 +38,26 @@ template <typename TabDataStruct, typename TabFileStruct>
 TabFileBase<TabDataStruct, TabFileStruct>::TabFileBase()
 {
     FString TabFullPath = FPaths::ProjectDir() + TabFileStruct::GetFilePath();
+
     if (!FPlatformFileManager::Get().GetPlatformFile().FileExists(*TabFullPath))
     {
         return;
     }
+
     TArray<FString> TabDatas;
     FFileHelper::LoadFileToStringArray(TabDatas, *TabFullPath);
     int32 Line = 0;
+
     for (FString LineContent : TabDatas)
     {
         UE_LOG(LogTemp, Warning, TEXT("[Line %d] %s"), Line, *LineContent);
+
         if (Line == 0)
         {
             Line++;
             continue;
         }
+
         TabDataStruct* TabDataIns = new TabDataStruct();
         TabDataIns->RegisterParams();
         TabDataIns->AddData(TabDatas, Line);
